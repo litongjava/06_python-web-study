@@ -5,7 +5,7 @@ import env_config
 
 app = APIFlask(__name__)
 # 数据库配置：这里以 SQLite 为例
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test02.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = env_config.SQLALCHEMY_DATABASE_URI
 # 确保添加了 SECRET_KEY
 app.config['SECRET_KEY'] = env_config.SECRET_KEY
 # 增加 SECURITY_PASSWORD_SALT 配置

@@ -1,7 +1,8 @@
 from functools import wraps
 
-from flask import redirect, url_for
 from flask_login import current_user
+
+from PermissionDao import PermissionDao
 
 
 def requires_roles(*roles):
@@ -14,5 +15,26 @@ def requires_roles(*roles):
       return {"code": 0, "mesage": "please login"}
 
     return wrapped
+
+  return wrapper
+
+
+def requires_permissions(*permissions):
+  def wrapper(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+      for permission_name in permissions:
+        permission_dao = PermissionDao()
+        permission = permission_dao.add_permission_if_not_exists(permission_name)
+        has_permission = False
+        for role in current_user.roles:
+          if permission in role.permissions:
+            has_permission = True
+            break
+        if not has_permission:
+          return {"code": 0, "message": "Insufficient permissions"}
+      return f(*args, **kwargs)
+
+    return decorated_function
 
   return wrapper

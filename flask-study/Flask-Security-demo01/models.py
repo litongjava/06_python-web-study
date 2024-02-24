@@ -7,13 +7,24 @@ users_roles = db.Table('users_roles',
                        db.Column('user_id', db.Integer(), db.ForeignKey('user.id')),
                        db.Column('role_id', db.Integer(), db.ForeignKey('role.id'))
                        )
+role_permissions = db.Table('role_permissions',
+                            db.Column('role_id', db.Integer(), db.ForeignKey('role.id')),
+                            db.Column('permission_id', db.Integer(), db.ForeignKey('permission.id'))
+                            )
 
 
-# 定义模型
+class Permission(db.Model):
+  id = db.Column(db.Integer, primary_key=True)
+  name = db.Column(db.String(80), unique=True)
+  description = db.Column(db.String(255))
+
+
 class Role(db.Model, RoleMixin):
   id = db.Column(db.Integer(), primary_key=True)
   name = db.Column(db.String(80), unique=True)
   description = db.Column(db.String(255))
+  permissions = db.relationship('Permission', secondary=role_permissions,
+                                backref=db.backref('roles', lazy='dynamic'))
 
 
 class User(db.Model, UserMixin):
