@@ -1,0 +1,11 @@
+[tool.poetry]
+name = "fastapi-helloworld"
+version = "0.1.0"
+description = ""
+authors = ["TongLi"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.11,<3.12"
+fastapi = "^0.110.1"
+uvicorn = "^0.29.0"
